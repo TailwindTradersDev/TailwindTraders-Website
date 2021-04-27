@@ -50,18 +50,14 @@ jobs:
     - name: Docker build
       working-directory: Source/Tailwind.Traders.Web
       run: |
-        docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
+        docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t ${{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
     
     - name: Scan Image for Vulnerabilities
       uses: Azure/container-scan@releases/v0
       id: container-scan
       continue-on-error: true
       with:
-        image-name: ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
-
-    - name: Docker push
-      run: |
-        docker push ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
+        image-name: ${{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
     
     - name: Post logs to appinsights
       uses: Azure/publish-security-assessments@v0
