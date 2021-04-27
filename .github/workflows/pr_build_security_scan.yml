@@ -44,7 +44,7 @@ jobs:
         docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
     
     - name: Scan Image for Vulnerabilities
-      uses: Azure/container-scan@releases/v1
+      uses: Azure/container-scan@releases/v0
       id: container-scan
       continue-on-error: true
       with:
