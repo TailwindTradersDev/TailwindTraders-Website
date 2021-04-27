@@ -29,7 +29,7 @@ jobs:
   build:
     name: Build and Scan for Vulnerabilities
     runs-on: ubuntu-latest
-    needs: analyse
+    # needs: analyse
     steps:
     - name: Checkout Github Action
       uses: actions/checkout@master
