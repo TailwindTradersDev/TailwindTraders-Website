@@ -1,4 +1,4 @@
-name: Build check on PR
+name: Build and Security Scan on PR
 
 on:
   pull_request:
