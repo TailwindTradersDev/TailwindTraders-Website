@@ -1,0 +1,65 @@
+name: Tailwind Traders Website Build
+
+on:
+  push:
+    branches: [main, ]
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  # analyse:
+  #   name: Analyse
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: 'Checkout Github Action'
+  #     uses: actions/checkout@master
+
+  #   # Initializes the CodeQL tools for scanning.
+  #   - name: Initialize CodeQL
+  #     uses: github/codeql-action/init@v1
+
+  #   - name: Autobuild
+  #     uses: github/codeql-action/autobuild@v1
+
+  #   - name: Perform CodeQL Analysis
+  #     uses: github/codeql-action/analyze@v1
+
+  build:
+    name: Build and Scan for Vulnerabilities
+    runs-on: ubuntu-latest
+    needs: analyse
+    steps:
+    - name: Checkout Github Action
+      uses: actions/checkout@master
+
+    - name: Docker login
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.CONTAINER_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+    - name: Docker build
+      working-directory: Source/Tailwind.Traders.Web
+      run: |
+        docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t ${{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
+    
+    - name: Docker push
+      run: |
+        docker push {{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
+    
+    - name: Scan Image for Vulnerabilities
+      uses: Azure/container-scan@releases/v0
+      id: container-scan
+      continue-on-error: true
+      with:
+        image-name: ${{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
+    
+    - name: Publish results to Azure Security Center
+      uses: Azure/publish-security-assessments@v0
+      with:
+        scan-results-path: ${{ steps.container-scan.outputs.scan-report-path }}
+        connection-string: ${{ secrets.AZ_APPINSIGHTS_CONNECTION_STRING }}
+        subscription-token: ${{ secrets.AZ_SUBSCRIPTION_TOKEN }}

@@ -1,17 +1,24 @@
-# name: Build check on PR
+name: Build check on PR
 
-# on:
-#   pull_request:
-#     branches: [ main ]
+on:
+  pull_request:
+    branches: [ main ]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: 'Checkout Github Action'
-#       uses: actions/checkout@master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
 
-#     - name: Docker build
-#       working-directory: Source/Tailwind.Traders.Web
-#       run: |
-#         docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t tailwindtraders/web:gh-${{ github.sha }} -t latest
+    - name: Docker build
+      working-directory: Source/Tailwind.Traders.Web
+      run: |
+        docker build . --build-arg sdkTag=5.0 --build-arg runtimeTag=5.0 -t tailwindtraders/web:gh-${{ github.sha }} -t latest
+
+    - name: Scan Image for Vulnerabilities
+      uses: Azure/container-scan@releases/v0
+      id: container-scan
+      continue-on-error: true
+      with:
+        image-name: tailwindtraders/web:gh-${{ github.sha }}
