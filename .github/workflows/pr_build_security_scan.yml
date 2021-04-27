@@ -40,6 +40,13 @@ jobs:
     - name: 'Checkout Github Action'
       uses: actions/checkout@master
 
+    - name: "docker login"
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.CONTAINER_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        
     - name: Docker build
       working-directory: Source/Tailwind.Traders.Web
       run: |
@@ -51,6 +58,10 @@ jobs:
       continue-on-error: true
       with:
         image-name: ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
+
+    - name: Docker push
+      run: |
+        docker push ${{ secrets.CONTAINER_REGISTRY }}/tailwindtraders/web:gh-${{ github.sha }}
     
     - name: Post logs to appinsights
       uses: Azure/publish-security-assessments@v0
