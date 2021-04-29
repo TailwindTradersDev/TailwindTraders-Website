@@ -57,7 +57,7 @@ jobs:
       with:
         image-name: ${{ secrets.CONTAINER_REGISTRY }}/tt-web:gh-${{ github.sha }}
     
-    - name: Publish results to Azure Security Center
+    - name: Publish Results to Azure Security Center
       uses: Azure/publish-security-assessments@v0
       with:
         scan-results-path: ${{ steps.container-scan.outputs.scan-report-path }}
