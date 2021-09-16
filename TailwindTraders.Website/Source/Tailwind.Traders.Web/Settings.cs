@@ -85,15 +85,7 @@ namespace Tailwind.Traders.Web
 
     public class ApplicationInsightsSettings
     {
-        private string _InstrumentationKey = "";
-        public string InstrumentationKey { 
-            get {
-                return "";
-            } 
-            set {
-                _InstrumentationKey = value;
-            }  
-        } 
+        public string InstrumentationKey { get; set; }
     }
 
     public class DebugInformationSettings
