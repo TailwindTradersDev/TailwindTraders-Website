@@ -18,7 +18,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Remove ${{ env.RG_NAME }}
         run: |
-          az resource group delete --name ${{ env.RG_NAME }} --force
+          az group delete --name ${{ env.RG_NAME }} --force
       
       - name: Azure Logout
         run: |
