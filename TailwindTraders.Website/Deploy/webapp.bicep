@@ -9,6 +9,7 @@ param dockerImage string = 'imagename'
 
 var appServicePlanName = toLower('appsvc-${webAppName}')
 var webSiteName = toLower('${webAppName}')
+var apiBaseUrl = 'https://backend.tailwindtraders.com'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appServicePlanName
@@ -33,6 +34,14 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
         {
           name: 'WEBSITES_ENABLE_APP_SERVICE_STORAGE'
           value: 'false'
+        }
+        {
+          name: 'ApiUrl'
+          value: '${apiBaseUrl}/webbff/v1'
+        }
+        {
+          name: 'ApiUrlShoppingCart'
+          value: '${apiBaseUrl}/cart-api'
         }
         {
           name: 'DOCKER_REGISTRY_SERVER_URL'
