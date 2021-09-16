@@ -5,7 +5,7 @@ on:
     types: [closed]
 
 env:
-  RG_NAME: 'twt-web-${{ github.event.pull_request.number}}'
+  RG_NAME: 'twt-website-${{ github.event.pull_request.number}}'
 
 jobs:
   removeInfra:
