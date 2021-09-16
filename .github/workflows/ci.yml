@@ -1,6 +1,11 @@
 name: CI Build
 
-on: push
+on: 
+  push:
+    branches:
+      - main
+      - IAC
+      - devbranch
 
 env:
   RG_NAME: 'twt-web'
