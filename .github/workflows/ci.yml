@@ -39,6 +39,9 @@ jobs:
   deployInfra:
     runs-on: self-hosted
     needs: buildImage
+    environment:
+      name: Production
+      url: 'https://${{ env.WEBAPP_NAME }}.azurewebsites.net'
     steps:
       # checkout branch
       - name: git checkout main branch
